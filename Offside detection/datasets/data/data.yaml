@@ -1,0 +1,12 @@
+train: "D:/\u684C\u9762/Offside detection/datasets/data/train"
+val: "D:/\u684C\u9762/Offside detection/datasets/data/val"
+test: "D:/\u684C\u9762/Offside detection/datasets/data/test"
+nc: 7
+names:
+- 18Yard Circle
+- 18Yard
+- 5Yard
+- First Half Central Circle
+- First Half Field
+- Second Half Central Circle
+- Second Half Field

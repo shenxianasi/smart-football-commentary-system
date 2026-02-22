@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - 足球解说系统</title>
+    <style>
+        /* 全局样式和主题配色 */
+        :root {
+            --primary-red: #D00027;
+            --dark-red: #900C3F;
+            --white: #FFFFFF;
+            --gray: #333333;
+            --light-gray: #F5F5F5;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --primary-gradient: linear-gradient(135deg, var(--primary-red), var(--dark-red));
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', 'Arial', sans-serif;
+        }
+        
+        body {
+            background: var(--primary-gradient);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        /* 足球动态背景效果 */
+        .football-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .football {
+            position: absolute;
+            font-size: 50px;
+            opacity: 0.1;
+            animation: moveFootball linear infinite;
+        }
+        
+        /* 不同位置和大小的足球元素 */
+        .football:nth-child(1) { top: 10%; left: -100px; font-size: 60px; animation-duration: 20s; }
+        .football:nth-child(2) { top: 30%; left: -100px; font-size: 80px; animation-duration: 25s; animation-delay: 2s; }
+        .football:nth-child(3) { top: 50%; left: -100px; font-size: 70px; animation-duration: 30s; animation-delay: 5s; }
+        .football:nth-child(4) { top: 70%; left: -100px; font-size: 90px; animation-duration: 35s; animation-delay: 8s; }
+        .football:nth-child(5) { top: 90%; left: -100px; font-size: 50px; animation-duration: 22s; animation-delay: 1s; }
+        
+        @keyframes moveFootball {
+            0% { transform: translateX(0) rotate(0deg); }
+            100% { transform: translateX(calc(100vw + 100px)) rotate(360deg); }
+        }
+        
+        /* 登录卡片 */
+        .login-card {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin: 2rem;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: float 6s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        /* 登录卡片装饰 */
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            right: -20%;
+            width: 60%;
+            height: 60%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%;
+            z-index: 0;
+        }
+        
+        /* 登录头部 */
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .login-logo {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: pulse 2s ease-in-out infinite;
+            display: inline-block;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .login-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, #fff, #f9f9f9, #fff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradient 3s ease infinite;
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .login-header p {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        /* 表单样式 */
+        .login-form {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: var(--white);
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--white);
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+        
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        /* 密码可见性切换 */
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 70%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.7);
+            transition: var(--transition);
+        }
+        
+        .password-toggle:hover {
+            color: var(--white);
+        }
+        
+        /* 记住我选项 */
+        .remember-me {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .remember-me input {
+            margin-right: 0.5rem;
+            cursor: pointer;
+        }
+        
+        .remember-me label {
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        /* 按钮样式 */
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--primary-gradient);
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: 0.5s;
+            z-index: -1;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* 注册链接 */
+        .register-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .register-link a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: bold;
+            transition: var(--transition);
+        }
+        
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+        
+        /* 错误信息 */
+        .error-message {
+            background-color: rgba(255, 0, 0, 0.2);
+            color: #ffcccc;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        /* 加载指示器 */
+        .loader {
+            display: none;
+            text-align: center;
+            padding: 1rem;
+        }
+        
+        .loader::after {
+            content: '';
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--white);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .login-card {
+                padding: 2rem;
+                margin: 1rem;
+            }
+            
+            .login-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 足球动态背景 -->
+    <div class="football-bg">
+        <div class="football">⚽</div>
+        <div class="football">⚽</div>
+        <div class="football">⚽</div>
+        <div class="football">⚽</div>
+        <div class="football">⚽</div>
+    </div>
+    
+    <!-- 登录卡片 -->
+    <div class="login-card">
+        <div class="login-header">
+            <div class="login-logo">⚽</div>
+            <h1>足球解说系统</h1>
+            <p>请登录您的账号</p>
+        </div>
+        
+        <!-- 错误信息容器 -->
+        <div id="error-message" class="error-message" style="display: none;"></div>
+        
+        <!-- 登录表单 -->
+        <form id="login-form" class="login-form">
+            <div class="form-group">
+                <label for="username">用户名</label>
+                <input type="text" id="username" name="username" placeholder="请输入用户名" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">密码</label>
+                <input type="password" id="password" name="password" placeholder="请输入密码" required>
+                <span class="password-toggle" id="password-toggle">👁️</span>
+            </div>
+            
+            <div class="remember-me">
+                <input type="checkbox" id="remember-me" name="remember-me">
+                <label for="remember-me">记住我</label>
+            </div>
+            
+            <!-- 加载指示器 -->
+            <div id="loader" class="loader"></div>
+            
+            <button type="submit" id="login-btn" class="btn">登录</button>
+        </form>
+        
+        <div class="register-link">
+            还没有账号？<a href="register.html">立即注册</a>
+        </div>
+    </div>
+    
+    <script>
+        // DOM 元素
+        const loginForm = document.getElementById('login-form');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const passwordToggle = document.getElementById('password-toggle');
+        const rememberMeInput = document.getElementById('remember-me');
+        const loginBtn = document.getElementById('login-btn');
+        const errorMessage = document.getElementById('error-message');
+        const loader = document.getElementById('loader');
+        
+        // 检查是否存在登录错误信息
+        const urlParams = new URLSearchParams(window.location.search);
+        const errorParam = urlParams.get('error');
+        
+        if (errorParam) {
+            showError(decodeURIComponent(errorParam));
+        }
+        
+        // 密码可见性切换
+        passwordToggle.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            passwordToggle.textContent = type === 'password' ? '👁️' : '👁️‍🗨️';
+        });
+        
+        // 表单提交事件
+        loginForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // 清除之前的错误信息
+            hideError();
+            
+            // 获取表单数据
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value;
+            const rememberMe = rememberMeInput.checked;
+            
+            // 简单验证
+            if (!username || !password) {
+                showError('请输入用户名和密码');
+                return;
+            }
+            
+            // 显示加载状态
+            showLoader();
+            
+            try {
+                // 发送登录请求
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password,
+                        remember_me: rememberMe
+                    })
+                });
+                
+                const data = await response.json();
+                
+                // 隐藏加载状态
+                hideLoader();
+                
+                if (data.success) {
+                    // 登录成功，重定向到主页
+                    window.location.href = 'index.html';
+                } else {
+                    // 显示错误信息
+                    showError(data.message || '登录失败，请检查您的用户名和密码');
+                }
+            } catch (error) {
+                // 隐藏加载状态
+                hideLoader();
+                
+                // 显示网络错误
+                showError('网络错误，请稍后再试');
+                console.error('登录错误:', error);
+            }
+        });
+        
+        // 显示错误信息
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+        }
+        
+        // 隐藏错误信息
+        function hideError() {
+            errorMessage.style.display = 'none';
+        }
+        
+        // 显示加载状态
+        function showLoader() {
+            loader.style.display = 'block';
+            loginBtn.disabled = true;
+            loginBtn.textContent = '登录中...';
+        }
+        
+        // 隐藏加载状态
+        function hideLoader() {
+            loader.style.display = 'none';
+            loginBtn.disabled = false;
+            loginBtn.textContent = '登录';
+        }
+        
+        // 输入框获得焦点时隐藏错误信息
+        usernameInput.addEventListener('focus', hideError);
+        passwordInput.addEventListener('focus', hideError);
+    </script>
+</body>
+</html>
