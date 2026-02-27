@@ -52,9 +52,7 @@
 ## 📺 演示视频
 
 项目演示视频如下：
-<video src="球智智库/演示视频.mp4" controls width="800">
-
-</video>
+<iframe src="//player.bilibili.com/player.html?isOutside=true&aid=113602149207477&bvid=BV1SKfwBAE3A&cid=28762202451&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" width="800" height="450"></iframe>
 
 ## 🚀 环境部署
 
