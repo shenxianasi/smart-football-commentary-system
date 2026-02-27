@@ -52,7 +52,7 @@
 ## 📺 演示视频
 
 项目演示视频如下：
-<iframe src="//player.bilibili.com/player.html?isOutside=true&aid=113602149207477&bvid=BV1SKfwBAE3A&cid=28762202451&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" width="800" height="450"></iframe>
+<iframe src="//player.bilibili.com/player.html?isOutside=true&aid=116113887203522&bvid=BV1SKfwBAE3A&cid=25968253237&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>>
 
 ## 🚀 环境部署
 
